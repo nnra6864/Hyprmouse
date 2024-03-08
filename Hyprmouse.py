@@ -50,7 +50,6 @@ def load_config():
 
 def draw_grid(window, cr):
     global config, width, height
-    if not config["show_grid"]: return
     cr.set_source_rgb(*hex_to_rgb(config["grid_color"]))
     cr.set_line_width(config["grid_thickness"])
 
@@ -69,8 +68,11 @@ def draw_grid(window, cr):
 
 def draw_numbers(window, cr):
     global config, width, height, posX, posY
+    font = Gtk.Settings.get_default().get_property("gtk-font-name").rsplit(maxsplit=1)[0] #Don't ask o_0
+    cr.select_font_face(font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    cr.set_font_size(20)
 
-    
+
 
 def update(window):
     window.queue_draw()
@@ -110,14 +112,15 @@ def draw_window():
 PROGRAM
 """
 
-
+font_params = Gtk.Settings.get_default().get_property("gtk-font-name").split()
 config = {
     "show_ui": True,
     "show_grid": True,
     "show_dots": True,
     "show_numbers": True,
     "format": "x, y",
-    "font": Gtk.Settings.get_default().get_property("gtk-font-name").rsplit(maxsplit=1)[0],
+    "font": " ".join(font_params[:-1]),
+    "font_size": int(font_params[-1]),
     "grid_color": "#ECEFF4",
     "dot_color": "#FFFFFF",
     "text_color": "#ECEFF4",
