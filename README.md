@@ -3,6 +3,14 @@
 ## Control the mouse with your keyboard using Vim Motions
 A highly customizeable Hyprland overlay that enables you to never move your hands away from the keyboard.
 
+## Requirements
+- [Hyprland](https://hyprland.org/)
+- [ydotool](https://github.com/ReimuNotMoe/ydotool)(make sure to start the ydotoold process or my app won't work)
+- [Cairo](https://pycairo.readthedocs.io/en/latest/)
+- [GTK3](https://docs.gtk.org/gtk3/)
+- [GTK Layer Shell](https://github.com/wmww/gtk-layer-shell)
+- [PyGObject](https://pypi.org/project/PyGObject/)
+
 ## Binds
 Custom keybinds will be supported shortly
 - <b>DEL</b> - Force quit the app
@@ -54,7 +62,7 @@ Some of the things to keep in mind:
 
 ## Thanks
 ### - [Vaxry](https://github.com/vaxerski)
-For making [Hyprland](https://github.com/hyprwm/Hyprland) and majority of tools this app is based on - <i>the fuck is an overlay</i>
+For making [Hyprland](https://hyprland.org/) and majority of tools this app is based on - <i>"the fuck is an overlay"</i>
 ### - [outfoxxed]()
 For suggesting an approach for making an overlay and pointing me in the right direction
 ### - PoutineBurgerMan
