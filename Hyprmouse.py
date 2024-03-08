@@ -249,12 +249,12 @@ config = {
     "text_color": "#ECEFF4", #Color of the text
     "text_outline_color": "#2E3440", #Color of the text outline
     "fps": 60, #Framerate at which the app is redrawn
-    "text_outline_thickness": 1, #Width of the text outline
-    "text_y_offset": 0, #Offset of the text on Y axis
     "background_opacity": 0.5, #Opacity of the background
+    "spacing": 400, #Spacing between grid lines
     "grid_thickness": 1, #Thickness of a grid line
     "dot_radius": 3, #Radius of a dot
-    "spacing": 400 #Spacing between grid lines
+    "text_outline_thickness": 1, #Width of the text outline
+    "text_y_offset": 0 #Offset of the text on Y axis
 }
 
 startPosX, startPosY = get_mouse_pos()
