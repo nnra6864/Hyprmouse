@@ -137,8 +137,8 @@ def draw_numbers(window, cr):
             cr.show_text(label)
 
 
-
 def on_key_press(window, event):
+    global posX, posY, prevPosX, prevPosY, direction, delta, width, height
     if event.keyval == Gdk.KEY_Delete:
         Gtk.main_quit()
 
@@ -148,6 +148,35 @@ def on_key_press(window, event):
 
     if event.keyval == Gdk.KEY_Return:
         Gtk.main_quit()
+
+    if chr(event.keyval) == '+' or chr(event.keyval) == '=':
+        direction = 1
+    if chr(event.keyval) == '-' or chr(event.keyval) == '_':
+        direction = -1
+    if chr(event.keyval).lower() == 'i':
+        direction = -direction
+
+    if chr(event.keyval).isdigit():
+        delta = delta * 10 + int(chr(event.keyval))
+    if chr(event.keyval).lower() == 'b' or event.keyval == Gdk.KEY_BackSpace:
+        delta = delta // 10
+    if chr(event.keyval).lower() == 'd':
+        delta = 0
+    
+    if chr(event.keyval).lower() == 'r':
+        prevPosX = posX
+        prevPosY = posY
+        subprocess.run(["ydotool", "mousemove", "-a", f"{width // 2}", f"{height // 2}"])
+    if chr(event.keyval).lower()  == 'x':
+        prevPosX = posX
+        subprocess.run(["ydotool", "mousemove", f"-x {delta * direction}", f"-y {0}"])
+        direction = 1
+        delta = 0
+    if chr(event.keyval).lower()  == 'y':
+        prevPosY = posY
+        subprocess.run(["ydotool", "mousemove", f"-x {0}", f"-y {-delta * direction}"])
+        direction = 1
+        delta = 0
 
 
 def update(window):
@@ -196,7 +225,6 @@ config = {
     "show_dots": True, #Are dots displayed
     "show_numbers": True, #Are numbers displayed
     "follow_mouse": False, #Is overlay follow the mouse
-    "live_update": True, #Is mouse position updated as you type
     "format": "x, y", #Formatting of numbers
     "font": " ".join(font_params[:-1]), #Name of the font you are using
     "font_size": int(font_params[-1]), #Size of the font you are using
@@ -214,13 +242,12 @@ config = {
     "spacing": 400 #Spacing between grid lines
 }
 
-editingX = False
-editingY = False
 startPosX, startPosY = get_mouse_pos()
 posX = startPosX
 posY = startPosY
 prevPosX = posX
 prevPosY = posY
+direction = 1
 delta = 0
 setproctitle.setproctitle("Hyprmouse")
 load_config()
