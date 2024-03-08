@@ -51,3 +51,11 @@ Some of the things to keep in mind:
 - `dot_radius = 3` - <b>float</b> - Radius of dots
 - `text_outline_thickness = 1` - <b>float</b> - Thickness of the text outline(I would advise against going above 2)
 - `text_y_offset = 0` - <b>float</b> - Y offset applied to text
+
+## Thanks
+### - [Vaxry](https://github.com/vaxerski)
+For making [Hyprland](https://github.com/hyprwm/Hyprland) and majority of tools this app is based on - <i>the fuck is an overlay</i>
+### - [outfoxxed]()
+For suggesting an approach for making an overlay and pointing me in the right direction
+### - PoutineBurgerMan
+For letting me know that hyprctl cursorpos exists
