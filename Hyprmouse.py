@@ -242,6 +242,7 @@ config = {
     "show_dots": True, #Are dots displayed
     "show_numbers": True, #Are numbers displayed
     "follow_mouse": False, #Is overlay follow the mouse
+    "reset_pos_on_start": True, #Is mouse position set to 0, 0 on start
     "format": "x, y", #Formatting of numbers
     "font": " ".join(font_params[:-1]), #Name of the font you are using
     "font_size": int(font_params[-1]), #Size of the font you are using
@@ -268,4 +269,6 @@ delta = 0
 setproctitle.setproctitle("Hyprmouse")
 load_config()
 width, height = get_screen_res() #Setting values once on launch
+if config["reset_pos_on_start"]:
+    subprocess.run(f"ydotool mousemove -a {width // 2} {height // 2}", shell=True)
 draw_window()
