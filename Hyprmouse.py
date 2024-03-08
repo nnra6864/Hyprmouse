@@ -118,10 +118,11 @@ def draw_numbers(window, cr):
 
     for x in range(w, tw, spacing):
         for y in range(h, th, spacing):
-            cr.set_source_rgb(*hex_to_rgb(config["text_outline_color"]))
             label = f"{x - posX} {posY - y}"
             xp = x - cr.text_extents(label)[4] // 2
             yp = y + cr.text_extents(label)[3] // 2 - y_offset
+            
+            cr.set_source_rgb(*hex_to_rgb(config["text_outline_color"]))
             cr.move_to(xp + offset, yp + offset)
             cr.show_text(label)
             cr.move_to(xp - offset, yp + offset)
@@ -136,12 +137,6 @@ def draw_numbers(window, cr):
             cr.show_text(label)
 
 
-def update(window):
-    global posX, posY
-    posX, posY = get_mouse_pos()
-    window.queue_draw()
-    return True
-
 
 def on_key_press(window, event):
     if event.keyval == Gdk.KEY_Delete:
@@ -153,6 +148,13 @@ def on_key_press(window, event):
 
     if event.keyval == Gdk.KEY_Return:
         Gtk.main_quit()
+
+
+def update(window):
+    global posX, posY
+    posX, posY = get_mouse_pos()
+    window.queue_draw()
+    return True
 
 
 def draw_window():
@@ -188,32 +190,38 @@ PROGRAM
 
 font_params = Gtk.Settings.get_default().get_property("gtk-font-name").split()
 config = {
-    "show_ui": True,
-    "show_background": True,
-    "show_grid": True,
-    "show_dots": True,
-    "show_numbers": True,
-    "follow_mouse": False,
-    "format": "x, y",
-    "font": " ".join(font_params[:-1]),
-    "font_size": int(font_params[-1]),
-    "background_color": "#000000",
-    "grid_color": "5E81AC",
-    "dot_color": "#EBCB8B",
-    "text_color": "#ECEFF4",
-    "text_outline_color": "#2E3440",
-    "fps": 60,
-    "text_outline_thickness": 1,
-    "text_y_offset": 0,
-    "background_opacity": 0.5,
-    "grid_thickness": 1,
-    "dot_radius": 3,
-    "spacing": 400
+    "show_ui": True, #Is UI displayed
+    "show_background": True, #Is background displayed
+    "show_grid": True, #Is grid displayed
+    "show_dots": True, #Are dots displayed
+    "show_numbers": True, #Are numbers displayed
+    "follow_mouse": False, #Is overlay follow the mouse
+    "live_update": True, #Is mouse position updated as you type
+    "format": "x, y", #Formatting of numbers
+    "font": " ".join(font_params[:-1]), #Name of the font you are using
+    "font_size": int(font_params[-1]), #Size of the font you are using
+    "background_color": "#000000", #Color of the background
+    "grid_color": "#5E81AC", #Color of the grid
+    "dot_color": "#EBCB8B", #Color of dots
+    "text_color": "#ECEFF4", #Color of the text
+    "text_outline_color": "#2E3440", #Color of the text outline
+    "fps": 60, #Framerate at which the app is redrawn
+    "text_outline_thickness": 1, #Width of the text outline
+    "text_y_offset": 0, #Offset of the text on Y axis
+    "background_opacity": 0.5, #Opacity of the background
+    "grid_thickness": 1, #Thickness of a grid line
+    "dot_radius": 3, #Radius of a dot
+    "spacing": 400 #Spacing between grid lines
 }
 
+editingX = False
+editingY = False
 startPosX, startPosY = get_mouse_pos()
 posX = startPosX
 posY = startPosY
+prevPosX = posX
+prevPosY = posY
+delta = 0
 setproctitle.setproctitle("Hyprmouse")
 load_config()
 width, height = get_screen_res() #Setting values once on launch
