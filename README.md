@@ -19,7 +19,7 @@ Custom keybinds will be supported shortly
 - <b>U</b>/<b>u</b> - Undo the last position change
 
 ## Config
-Config file should be located in `~/.config/hypr/hyprmouse.conf`
+Config file should be located in `~/.config/hypr/hyprmouse.conf`  
 Some of the things to keep in mind:
 - All of the following values are valid for bools: `True`/`true`, `False`/`false`
 - All the colors must be provided as HEX values, # is not required
@@ -29,7 +29,7 @@ Some of the things to keep in mind:
 
 <br/>
 
-Example provided below contains all the options
+<b>Example</b> provided below contains all the options
 - `show_ui = True` - <b>bool</b> - Will the UI be shown
 - `show_background = True` - <b>bool</b> - Will the background be shown
 - `show_grid = True` - <b>bool</b> - Will the grid be shown
