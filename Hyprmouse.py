@@ -116,7 +116,8 @@ def draw_numbers(window, cr):
     cr.select_font_face(config["font"], cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     cr.set_font_size(config["font_size"])
     spacing = config["spacing"]
-    
+    text_format = config["format"]
+
     follow_mouse = config["follow_mouse"]
     w =  posX % spacing - spacing if follow_mouse else (width // 2) % spacing
     h =  posY % spacing - spacing if follow_mouse else (height // 2) % spacing
@@ -128,7 +129,7 @@ def draw_numbers(window, cr):
 
     for x in range(w, tw, spacing):
         for y in range(h, th, spacing):
-            label = f"{x - posX} {posY - y}"
+            label = text_format.replace('x', f"{x - posX}").replace('y', f"{posY - y}")
             xp = x - cr.text_extents(label)[4] // 2
             yp = y + cr.text_extents(label)[3] // 2 - y_offset
             
