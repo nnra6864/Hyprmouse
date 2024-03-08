@@ -25,6 +25,10 @@ Custom keybinds will be supported shortly
 - <b>Y</b>/<b>y</b> - Move on the Y axis in the set direction
 - <b>R</b>/<b>r</b> - Move to the center of the screen
 - <b>U</b>/<b>u</b> - Undo the last position change
+- <b>H</b>/<b>h</b>/<b>←</b> - Move left
+- <b>J</b>/<b>j</b>/<b>↓</b> - Move down
+- <b>K</b>/<b>k</b>/<b>↑</b> - Move up
+- <b>l</b>/<b>l</b>/<b>→</b> - Move right
 
 ## Config
 Config file should be located in `~/.config/hypr/hyprmouse.conf`  

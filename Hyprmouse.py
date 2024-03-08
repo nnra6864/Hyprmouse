@@ -186,6 +186,19 @@ def on_key_press(window, event):
         subprocess.run(f"ydotool mousemove -x {0} -y {-delta * direction}", shell=True)
         direction = 1
         delta = 0
+        subprocess.run([f"ydotool mousemove -a {x} {y}"], shell=True)
+    if event.keyval == Gdk.KEY_Left or chr(event.keyval).lower() == 'h':
+        record_position(posX, posY)
+        subprocess.run(f"ydotool mousemove -x {-delta} -y {0}", shell=True)
+    if event.keyval == Gdk.KEY_Down or chr(event.keyval).lower() == 'j':
+        record_position(posX, posY)
+        subprocess.run(f"ydotool mousemove -x {0} -y {delta}", shell=True)
+    if event.keyval == Gdk.KEY_Up or chr(event.keyval).lower() == 'k':
+        record_position(posX, posY)
+        subprocess.run(f"ydotool mousemove -x {0} -y {-delta}", shell=True)
+    if event.keyval == Gdk.KEY_Right or chr(event.keyval).lower() == 'l':
+        record_position(posX, posY)
+        subprocess.run(f"ydotool mousemove -x {delta} -y {0}", shell=True)
     if chr(event.keyval).lower() == 'r':
         record_position(posX, posY)
         subprocess.run(f"ydotool mousemove -a {width // 2} {height // 2}", shell=True)
@@ -193,7 +206,6 @@ def on_key_press(window, event):
         delta = 0
     if chr(event.keyval).lower() == 'u':
         x, y = pop_position()
-        subprocess.run([f"ydotool mousemove -a {x} {y}"], shell=True)
 
 
 def update(window):
