@@ -2,6 +2,7 @@ import setproctitle, subprocess, cairo, os, re, gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkLayerShell', '0.1')
 from gi.repository import Gtk, Gdk, GtkLayerShell, GLib
+from collections import deque
 
 
 """
@@ -23,6 +24,14 @@ def get_mouse_pos():
     return map(int, subprocess.check_output(["hyprctl", "cursorpos"]).decode("utf-8").split(','))
 
 
+def record_position(x, y):
+    position_history.append((x, y))
+
+
+def pop_position():
+    if position_history:
+        return position_history.pop()
+    return (startPosX, startPosY)
 
 """
 FUNCTIONS
@@ -138,12 +147,12 @@ def draw_numbers(window, cr):
 
 
 def on_key_press(window, event):
-    global posX, posY, prevPosX, prevPosY, direction, delta, width, height
+    global posX, posY, direction, delta, width, height
     if event.keyval == Gdk.KEY_Delete:
         Gtk.main_quit()
 
     if event.keyval == Gdk.KEY_Escape:
-        subprocess.run(["ydotool", "mousemove", "-a", f"{startPosX}", f"{startPosY}"])
+        subprocess.run(f"ydotool mousemove -a {startPosX} {startPosY}", shell=True)
         Gtk.main_quit()
 
     if event.keyval == Gdk.KEY_Return:
@@ -164,19 +173,23 @@ def on_key_press(window, event):
         delta = 0
     
     if chr(event.keyval).lower() == 'r':
-        prevPosX = posX
-        prevPosY = posY
-        subprocess.run(["ydotool", "mousemove", "-a", f"{width // 2}", f"{height // 2}"])
+        record_position(posX, posY)
+        subprocess.run(f"ydotool mousemove -a {width // 2} {height // 2}", shell=True)
+        direction = 1
+        delta = 0
     if chr(event.keyval).lower()  == 'x':
-        prevPosX = posX
-        subprocess.run(["ydotool", "mousemove", f"-x {delta * direction}", f"-y {0}"])
+        record_position(posX, posY)
+        subprocess.run(f"ydotool mousemove -x {delta * direction} -y {0}", shell=True)
         direction = 1
         delta = 0
     if chr(event.keyval).lower()  == 'y':
-        prevPosY = posY
-        subprocess.run(["ydotool", "mousemove", f"-x {0}", f"-y {-delta * direction}"])
+        record_position(posX, posY)
+        subprocess.run(f"ydotool mousemove -x {0} -y {-delta * direction}", shell=True)
         direction = 1
         delta = 0
+    if chr(event.keyval).lower() == 'u':
+        x, y = pop_position()
+        subprocess.run([f"ydotool mousemove -a {x} {y}"], shell=True)
 
 
 def update(window):
@@ -245,8 +258,7 @@ config = {
 startPosX, startPosY = get_mouse_pos()
 posX = startPosX
 posY = startPosY
-prevPosX = posX
-prevPosY = posY
+position_history = deque()
 direction = 1
 delta = 0
 setproctitle.setproctitle("Hyprmouse")
