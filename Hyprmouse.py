@@ -55,6 +55,8 @@ def load_config():
                         config[key] = False
                     elif value.lstrip('-').isdigit():
                         config[key] = -int(value.lstrip('-')) if '-' in value else int(value)
+                    elif value.replace('.', '', 1).isdigit():
+                        config[key] = float(value)
                     else:
                         config[key] = value
     except FileNotFoundError:
