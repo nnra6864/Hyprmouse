@@ -30,24 +30,24 @@ Some of the things to keep in mind:
 <br/>
 
 Example provided below contains all the options
-- `show_ui = True` - <b></b> - Will the UI be shown
-- `show_background = True` - <b></b> - Will the background be shown
-- `show_grid = True` - <b></b> - Will the grid be shown
-- `show_dots = True` - <b></b> - Will the dots be shown
-- `show_numbers = True` - <b></b> - Will the numbers be shown
-- `follow_mouse = False` - <b></b> - Will the UI be relative to the cursor
-- `format = x, y` - <b></b> - How will the coordinates be formatted
-- `font = Cascadia Code` - <b></b> - Font that the UI will use
-- `font_size = 30` - <b></b> - Font size
-- `background_color = #000000` - <b></b> - Color of the background
-- `grid_color = #5E81AC` - <b></b> - Color of the grid
-- `dot_color = #EBCB8B` - <b></b> - Color of dots
-- `text_color = #ECEFF4` - <b></b> - Color of the text
-- `text_outline_color = #2E3440` - <b></b> - Color of the text outline
-- `fps = 60` - <b></b> - Framerate at which the app will be redrawn
-- `background_opacity = 0.5` - <b></b> - Opacity of the background
-- `spacing = 400` - <b></b> - Spacing between grid lines
-- `grid_thickness = 1` - <b></b> - Thickness of grid lines
-- `dot_radius = 3` - <b></b> - Radius of dots
-- `text_outline_thickness = 1` - <b></b> - Thickness of the text outline(I would advise against going above 2)
-- `text_y_offset = 0` - <b></b> - Y offset applied to text
+- `show_ui = True` - <b>bool</b> - Will the UI be shown
+- `show_background = True` - <b>bool</b> - Will the background be shown
+- `show_grid = True` - <b>bool</b> - Will the grid be shown
+- `show_dots = True` - <b>bool</b> - Will the dots be shown
+- `show_numbers = True` - <b>bool</b> - Will the numbers be shown
+- `follow_mouse = False` - <b>bool</b> - Will the UI be relative to the cursor
+- `format = x, y` - <b>string</b> - How will the coordinates be formatted
+- `font = Cascadia Code` - <b>string</b> - Font that the UI will use
+- `font_size = 30` - <b>int</b> - Font size
+- `background_color = #000000` - <b>string</b> - Color of the background
+- `grid_color = #5E81AC` - <b>string</b> - Color of the grid
+- `dot_color = #EBCB8B` - <b>string</b> - Color of dots
+- `text_color = #ECEFF4` - <b>string</b> - Color of the text
+- `text_outline_color = #2E3440` - <b>string</b> - Color of the text outline
+- `fps = 60` - <b>int</b> - Framerate at which the app will be redrawn
+- `background_opacity = 0.5` - <b>float</b> - Opacity of the background
+- `spacing = 400` - <b>int</b> - Spacing between grid lines
+- `grid_thickness = 1` - <b>float</b> - Thickness of grid lines
+- `dot_radius = 3` - <b>float</b> - Radius of dots
+- `text_outline_thickness = 1` - <b>float</b> - Thickness of the text outline(I would advise against going above 2)
+- `text_y_offset = 0` - <b>float</b> - Y offset applied to text
