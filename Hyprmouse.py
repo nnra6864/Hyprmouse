@@ -10,7 +10,7 @@ UTILS
 
 
 def hex_to_rgb(hex_string):
-    return tuple(int(hex_string[i:i+2], 16) / 255 for i in (1, 3, 5))
+    return tuple(int(hex_string[i:i+2], 16) / 255 for i in ((1, 3, 5) if hex_string.startswith('#') else (0, 2, 4)))
 
 
 def get_screen_res():
@@ -39,12 +39,12 @@ def load_config():
                 key = key.strip()
                 value = value.strip()
                 if key in config:
-                    if value == "True":
+                    if value.lower() == "true":
                         config[key] = True
-                    elif value == "False":
+                    elif value.lower() == "false":
                         config[key] = False
-                    elif value.isdigit():
-                        config[key] = int(value)
+                    elif value.lstrip('-').isdigit():
+                        config[key] = -int(value.lstrip('-')) if '-' in value else int(value)
                     else:
                         config[key] = value
     except FileNotFoundError:
@@ -60,22 +60,45 @@ def draw_background(window, cr):
 
 
 def draw_grid(window, cr):
-    global config, width, height
+    global config, width, height, posX, posY
     cr.set_source_rgb(*hex_to_rgb(config["grid_color"]))
     cr.set_line_width(config["grid_thickness"])
-    
     spacing = config["spacing"]
-    for x in range((width // 2) % spacing, width, spacing):
+
+    follow_mouse = config["follow_mouse"]
+    w =  posX % spacing - spacing if follow_mouse else (width // 2) % spacing
+    h =  posY % spacing - spacing if follow_mouse else (height // 2) % spacing
+    tw = width + spacing if follow_mouse else width
+    th = height + spacing if follow_mouse else height
+
+    for x in range(w, tw, spacing):
         cr.move_to(x, 0)
         cr.line_to(x, height)
         cr.stroke()
-
-    for y in range((height // 2) % spacing, height, spacing):
+    
+    for y in range(h, th, spacing):
         cr.move_to(0, y)
         cr.line_to(width, y)
         cr.stroke()
 
-    #Try to remove this func from the draw call later if I figure out a way to not erase the grid whilst doing it :/
+
+def draw_dots(window, cr):
+    global config, width, height, posX, posY
+    spacing = config["spacing"]
+
+    follow_mouse = config["follow_mouse"]
+    w =  posX % spacing - spacing if follow_mouse else (width // 2) % spacing
+    h =  posY % spacing - spacing if follow_mouse else (height // 2) % spacing
+    tw = width + spacing if follow_mouse else width
+    th = height + spacing if follow_mouse else height
+    
+    cr.set_source_rgb(*hex_to_rgb(config["dot_color"]))
+    rad = config["dot_radius"]
+    pi = 2 * 3.14159
+    for x in range(w, tw, spacing):
+        for y in range(h, th, spacing):
+            cr.arc(x, y, rad, 0, pi)
+            cr.fill()
 
 
 def draw_numbers(window, cr):
@@ -84,13 +107,21 @@ def draw_numbers(window, cr):
     cr.set_font_size(config["font_size"])
     spacing = config["spacing"]
     
+    follow_mouse = config["follow_mouse"]
+    w =  posX % spacing - spacing if follow_mouse else (width // 2) % spacing
+    h =  posY % spacing - spacing if follow_mouse else (height // 2) % spacing
+    tw = width + spacing if follow_mouse else width
+    th = height + spacing if follow_mouse else height
+
     offset = config["text_outline_thickness"]
-    for x in range((width // 2) % spacing, width, spacing):
-        for y in range((height // 2) % spacing, height, spacing):
+    y_offset = config["text_y_offset"]
+
+    for x in range(w, tw, spacing):
+        for y in range(h, th, spacing):
             cr.set_source_rgb(*hex_to_rgb(config["text_outline_color"]))
             label = f"{x - posX} {posY - y}"
             xp = x - cr.text_extents(label)[4] // 2
-            yp = y + cr.text_extents(label)[3] // 2
+            yp = y + cr.text_extents(label)[3] // 2 - y_offset
             cr.move_to(xp + offset, yp + offset)
             cr.show_text(label)
             cr.move_to(xp - offset, yp + offset)
@@ -140,6 +171,7 @@ def draw_window():
     if config["show_ui"]:
         if config["show_background"]: window.connect("draw", draw_background)
         if config["show_grid"]: window.connect("draw", draw_grid)
+        if config["show_dots"]: window.connect("draw", draw_dots)
         if config["show_numbers"]: window.connect("draw", draw_numbers)
     window.connect("key-press-event", on_key_press)
 
@@ -161,18 +193,21 @@ config = {
     "show_grid": True,
     "show_dots": True,
     "show_numbers": True,
+    "follow_mouse": False,
     "format": "x, y",
     "font": " ".join(font_params[:-1]),
     "font_size": int(font_params[-1]),
-    "background_color": "000000",
-    "grid_color": "#5e81ac",
-    "dot_color": "#ECEFF4",
+    "background_color": "#000000",
+    "grid_color": "5E81AC",
+    "dot_color": "#EBCB8B",
     "text_color": "#ECEFF4",
     "text_outline_color": "#2E3440",
-    "fps": 30,
+    "fps": 60,
     "text_outline_thickness": 1,
+    "text_y_offset": 0,
     "background_opacity": 0.5,
     "grid_thickness": 1,
+    "dot_radius": 3,
     "spacing": 400
 }
 
