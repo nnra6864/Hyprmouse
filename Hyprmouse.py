@@ -262,7 +262,7 @@ config = {
     "show_dots": True, #Are dots displayed
     "show_numbers": True, #Are numbers displayed
     "follow_mouse": False, #Is overlay follow the mouse
-    "reset_pos_on_start": True, #Is mouse position set to 0, 0 on start
+    "reset_pos_on_start": False, #Is mouse position set to 0, 0 on start
     "format": "x, y", #Formatting of numbers
     "font": " ".join(font_params[:-1]), #Name of the font you are using
     "font_size": int(font_params[-1]), #Size of the font you are using

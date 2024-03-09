@@ -48,7 +48,7 @@ Some of the things to keep in mind:
 - `show_dots = True` - <b>bool</b> - Will the dots be shown
 - `show_numbers = True` - <b>bool</b> - Will the numbers be shown
 - `follow_mouse = False` - <b>bool</b> - Will the UI be relative to the cursor
-- `reset_pos_on_start = True` - <b>bool</b> - Will the cursor be moved to the middle on start
+- `reset_pos_on_start = False` - <b>bool</b> - Will the cursor be moved to the middle on start
 - `format = x, y` - <b>string</b> - How will the coordinates be formatted
 - `font = Cascadia Code` - <b>string</b> - Font that the UI will use
 - `font_size = 30` - <b>int</b> - Font size
