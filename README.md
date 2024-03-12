@@ -1,8 +1,8 @@
 # Hyprmouse
+![Hyprmouse](Icon.svg "Hyprmouse")
 
 ## Control the mouse with your keyboard using Vim Motions
 A highly customizeable Hyprland overlay that enables you to never move your hands away from the keyboard.
-![Hyprmouse](Icon.svg "Hyprmouse")
 
 ## Requirements
 - [Hyprland](https://hyprland.org/)
