@@ -25,7 +25,7 @@ Custom keybinds will be supported shortly
 - <b>X</b>/<b>x</b> - Move on the X axis in the set direction
 - <b>Y</b>/<b>y</b> - Move on the Y axis in the set direction
 - <b>R</b>/<b>r</b> - Move to the center of the screen
-- <b>D</b>/<b>d</b> - Reset and delta
+- <b>D</b>/<b>d</b> - Reset delta
 - <b>U</b>/<b>u</b> - Undo the last position change
 - <b>H</b>/<b>h</b>/<b>←</b> - Move left
 - <b>J</b>/<b>j</b>/<b>↓</b> - Move down
