@@ -70,7 +70,7 @@ Some of the things to keep in mind:
 ## Thanks
 ### - [Vaxry](https://github.com/vaxerski)
 For making [Hyprland](https://hyprland.org/) and majority of tools this app is based on - <i>"the fuck is an overlay"</i>
-### - [outfoxxed]()
+### - [outfoxxed](https://github.com/outfoxxed)
 For suggesting an approach for making an overlay and pointing me in the right direction
 ### - PoutineBurgerMan
 For letting me know that hyprctl cursorpos exists
