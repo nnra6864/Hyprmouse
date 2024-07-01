@@ -9,7 +9,6 @@ from collections import deque
 UTILS
 """
 
-
 def hex_to_rgb(hex_string):
     return tuple(int(hex_string[i:i+2], 16) / 255 for i in ((1, 3, 5) if hex_string.startswith('#') else (0, 2, 4)))
 
@@ -37,7 +36,6 @@ def pop_position():
 """
 FUNCTIONS
 """
-
 
 def load_config():
     global config
@@ -152,61 +150,12 @@ def draw_numbers(window, cr):
 
 def on_key_press(window, event):
     global posX, posY, direction, delta, width, height
-    if event.keyval == Gdk.KEY_Delete:
-        Gtk.main_quit()
-
-    elif event.keyval == Gdk.KEY_Escape:
-        subprocess.run(f"ydotool mousemove -a {startPosX} {startPosY}", shell=True)
-        Gtk.main_quit()
-
-    elif event.keyval == Gdk.KEY_Return:
-        Gtk.main_quit()
-
-    elif chr(event.keyval).isdigit():
-        delta = delta * 10 + int(chr(event.keyval))
-    elif chr(event.keyval).lower() == 'b' or event.keyval == Gdk.KEY_BackSpace:
-        delta = delta // 10
-    elif chr(event.keyval).lower() == 'd':
-        delta = 0
     
-    elif chr(event.keyval) == '+' or chr(event.keyval) == '=':
-        direction = 1
-    elif chr(event.keyval) == '-' or chr(event.keyval) == '_':
-        direction = -1
-    elif chr(event.keyval).lower() == 'i':
-        direction = -direction
-
-    elif chr(event.keyval).lower()  == 'x':
-        record_position(posX, posY)
-        subprocess.run(f"ydotool mousemove -x {delta * direction} -y {0}", shell=True)
-        direction = 1
-        delta = 0
-    elif chr(event.keyval).lower()  == 'y':
-        record_position(posX, posY)
-        subprocess.run(f"ydotool mousemove -x {0} -y {-delta * direction}", shell=True)
-        direction = 1
-        delta = 0
-        subprocess.run([f"ydotool mousemove -a {x} {y}"], shell=True)
-    elif event.keyval == Gdk.KEY_Left or chr(event.keyval).lower() == 'h':
-        record_position(posX, posY)
-        subprocess.run(f"ydotool mousemove -x {-delta} -y {0}", shell=True)
-    elif event.keyval == Gdk.KEY_Down or chr(event.keyval).lower() == 'j':
-        record_position(posX, posY)
-        subprocess.run(f"ydotool mousemove -x {0} -y {delta}", shell=True)
-    elif event.keyval == Gdk.KEY_Up or chr(event.keyval).lower() == 'k':
-        record_position(posX, posY)
-        subprocess.run(f"ydotool mousemove -x {0} -y {-delta}", shell=True)
-    elif event.keyval == Gdk.KEY_Right or chr(event.keyval).lower() == 'l':
-        record_position(posX, posY)
-        subprocess.run(f"ydotool mousemove -x {delta} -y {0}", shell=True)
-    elif chr(event.keyval).lower() == 'r':
-        record_position(posX, posY)
-        subprocess.run(f"ydotool mousemove -a {width // 2} {height // 2}", shell=True)
-        direction = 1
-        delta = 0
-    elif chr(event.keyval).lower() == 'u':
-        x, y = pop_position()
-
+    key_char = chr(event.keyval).lower() if event.keyval < 256 else event.keyval
+    action = key_actions.get(key_char)
+    
+    if action:
+        action()
 
 def update(window):
     global posX, posY
@@ -243,6 +192,105 @@ def draw_window():
 
 
 """
+ACTIONS
+"""
+
+key_actions = {
+        Gdk.KEY_Delete: Gtk.main_quit,
+        Gdk.KEY_Escape: lambda: (subprocess.run(f"ydotool mousemove -a {startPosX} {startPosY}", shell=True), Gtk.main_quit()),
+        Gdk.KEY_Return: Gtk.main_quit,
+        '0': lambda: update_delta(0),
+        '1': lambda: update_delta(1),
+        '2': lambda: update_delta(2),
+        '3': lambda: update_delta(3),
+        '4': lambda: update_delta(4),
+        '5': lambda: update_delta(5),
+        '6': lambda: update_delta(6),
+        '7': lambda: update_delta(7),
+        '8': lambda: update_delta(8),
+        '9': lambda: update_delta(9),
+        'b': lambda: reduce_delta(),
+        Gdk.KEY_BackSpace: lambda: reduce_delta(),
+        'd': lambda: clear_delta(),
+        '+': lambda: set_direction(1),
+        '=': lambda: set_direction(1),
+        '-': lambda: set_direction(-1),
+        '_': lambda: set_direction(-1),
+        'i': lambda: invert_direction(),
+        'x': lambda: jump(1, 0),
+        'y': lambda: jump(0, 1),
+        Gdk.KEY_Left: lambda: move(-1, 0),
+        'h': lambda: move(-1, 0),
+        Gdk.KEY_Down: lambda: move(0, -1),
+        'j': lambda: move(0, -1),
+        Gdk.KEY_Up: lambda: move(0, 1),
+        'k': lambda: move(0, 1),
+        Gdk.KEY_Right: lambda: move(1, 0),
+        'l': lambda: move(1, 0),
+        'r': lambda: center_mouse(),
+        'u': lambda: restore_position()
+    }
+
+def update_delta(num):
+    global delta, initial_input, moved_since_reset
+    if (initial_input and config["clear_delta_on_initial_input"]):
+        initial_input = False
+        clear_delta()
+    if (moved_since_reset and config["clear_delta_on_input_after_move"]):
+        moved_since_reset = False
+        clear_delta()
+    delta = delta * 10 + num
+
+def reduce_delta():
+    global delta
+    delta = delta // 10
+
+def reset_delta():
+    global delta, moved_since_reset
+    delta = config["default_delta"] if config["reset_delta_to_default"] else 0
+
+def clear_delta():
+    global delta
+    delta = 0
+
+def set_direction(value):
+    global direction
+    if (config["toggle_dir"]):
+        invert_direction()
+    else:
+        direction = value
+
+def invert_direction():
+    global direction
+    direction = -direction
+
+def jump(x_multiplier, y_multiplier):
+    global direction
+    move(direction * x_multiplier, direction * y_multiplier)
+    if (config["reset_on_jump"]):
+        direction = 1
+        reset_delta();
+
+def move(x_multiplier, y_multiplier):
+    global delta, moved_since_reset
+    record_position(posX, posY)
+    moved_since_reset = True
+    subprocess.run(f"ydotool mousemove -x {delta * x_multiplier} -y {-delta * y_multiplier}", shell=True)
+
+def center_mouse():
+    global width, height, direction, delta
+    record_position(posX, posY)
+    subprocess.run(f"ydotool mousemove -a {width // 2} {height // 2}", shell=True)
+    if (config["reset_on_jump"]):
+        direction = 1
+        reset_delta()
+
+def restore_position():
+    x, y = pop_position()
+    subprocess.run(f"ydotool mousemove -a {x} {y}", shell=True)
+
+
+"""
 PROGRAM
 """
 
@@ -253,7 +301,14 @@ config = {
     "show_grid": True, #Is grid displayed
     "show_dots": True, #Are dots displayed
     "show_numbers": True, #Are numbers displayed
-    "follow_mouse": False, #Is overlay follow the mouse
+    "follow_mouse": False, #Is overlay following the mouse
+    "default_delta": 10, #Default movement delta
+    "reset_on_jump": False, #Whether to reset dir and delta when jumping
+    "set_dir_on_move": True, #Whether to set dir when moving
+    "toggle_dir": True, #Pressing the same sign twice will toggle the direction
+    "reset_delta_to_default": True, #Whether to reset delta to the default_delta or 0
+    "clear_delta_on_initial_input": True, #Whether to clear delta on initial number input
+    "clear_delta_on_input_after_move": True, #Whether to clear delta on number input after moving
     "reset_pos_on_start": False, #Is mouse position set to 0, 0 on start
     "format": "x, y", #Formatting of numbers
     "font": " ".join(font_params[:-1]), #Name of the font you are using
@@ -272,15 +327,17 @@ config = {
     "text_y_offset": 0 #Offset of the text on Y axis
 }
 
+setproctitle.setproctitle("Hyprmouse")
+load_config()
 startPosX, startPosY = get_mouse_pos()
 posX = startPosX
 posY = startPosY
 position_history = deque()
 direction = 1
-delta = 0
-setproctitle.setproctitle("Hyprmouse")
-load_config()
-width, height = get_screen_res() #Setting values once on launch
+delta = config["default_delta"]
+width, height = get_screen_res()
+initial_input = config["clear_delta_on_initial_input"]
+moved_since_reset = False
 if config["reset_pos_on_start"]:
     subprocess.run(f"ydotool mousemove -a {width // 2} {height // 2}", shell=True)
 draw_window()
