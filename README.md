@@ -22,8 +22,8 @@ Custom keybinds will be supported shortly
 - <b>+</b>/<b>=</b> - Switch to positive direction
 - <b>-</b>/<b>=</b> - Switch to negative direction
 - <b>I</b>/<b>i</b> - Invert direction
-- <b>X</b>/<b>x</b> - Move on the X axis in the set direction
-- <b>Y</b>/<b>y</b> - Move on the Y axis in the set direction
+- <b>X</b>/<b>x</b> - Jump on the X axis in the set direction
+- <b>Y</b>/<b>y</b> - Jump on the Y axis in the set direction
 - <b>R</b>/<b>r</b> - Move to the center of the screen
 - <b>D</b>/<b>d</b> - Reset delta
 - <b>U</b>/<b>u</b> - Undo the last position change
@@ -50,6 +50,13 @@ Some of the things to keep in mind:
 - `show_dots = True` - <b>bool</b> - Will the dots be shown
 - `show_numbers = True` - <b>bool</b> - Will the numbers be shown
 - `follow_mouse = False` - <b>bool</b> - Will the UI be relative to the cursor
+- `default_delta = 10` - <b>int</b> - Default movement delta
+- `reset_on_jump = False` - <b>bool</b> - Whether to reset dir and delta when jumping
+- `set_dir_on_move = True` - <b>bool</b> - Whether to set dir when moving
+- `toggle_dir = True` - <b>bool</b> - Pressing the same sign twice will toggle the direction
+- `reset_delta_to_default = True` - <b>bool</b> - Whether to reset delta to the `default_delta` or 0
+- `clear_delta_on_initial_input = True` - <b>bool</b> - Whether to clear delta on initial number input
+- `clear_delta_on_input_after_move = True` - <b>bool</b> - Whether to clear delta on number input after moving
 - `reset_pos_on_start = False` - <b>bool</b> - Will the cursor be moved to the middle on start
 - `format = x, y` - <b>string</b> - How will the coordinates be formatted
 - `font = Cascadia Code` - <b>string</b> - Font that the UI will use
@@ -69,7 +76,7 @@ Some of the things to keep in mind:
 
 ## Thanks
 ### - [Vaxry](https://github.com/vaxerski)
-For making [Hyprland](https://hyprland.org/) and majority of tools this app is based on - <i>"the fuck is an overlay"</i>
+For making [Hyprland](https://hyprland.org/) and majority of tools this app is based on - <i>"[the fuck is an overlay](https://discord.com/channels/961691461554950145/1070436481912549497/1214007552929570907)"</i>
 ### - [outfoxxed](https://github.com/outfoxxed)
 For suggesting an approach for making an overlay and pointing me in the right direction
 ### - PoutineBurgerMan
