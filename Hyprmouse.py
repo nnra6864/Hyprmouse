@@ -10,6 +10,7 @@ UTILS
 """
 
 def hex_to_rgb(hex_string):
+    hex_string = str(hex_string)
     return tuple(int(hex_string[i:i+2], 16) / 255 for i in ((1, 3, 5) if hex_string.startswith('#') else (0, 2, 4)))
 
 
